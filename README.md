@@ -3,8 +3,8 @@
 A fitness chatbot that mimics Dr. Michael Israetel using GPT-4. This full-stack project demonstrates AI personality, real-time chat, and modern web development.
 
 ## Live Demo
-
-[Visit Site](https://your-domain.com)
+Coming soon!
+<!-- [Visit Site](https://your-domain.com) -->
 
 ## Project Overview
 
