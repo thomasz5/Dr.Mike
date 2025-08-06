@@ -90,21 +90,6 @@ Or deploy using the Vercel Dashboard.
 * "Thoughts on fasted cardio?"
 * "How much protein for muscle growth?"
 
-## Learning Goals
-
-* Use of React and Next.js
-* OpenAI API integration
-* Prompt engineering
-* Real-time chat development
-* Deployment with Vercel
-
-## Future Ideas
-
-* Add voice features
-* Summarize video content
-* Generate workout plans
-* Build a mobile app
-* Enable chat streaming
 
 ## Credits
 
