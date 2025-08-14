@@ -8,7 +8,7 @@ Coming soon!
 
 ## Project Overview
 
-Dr. Mike AI is a learning-focused MVP featuring:
+Dr. Mike AI is a learning-focused  featuring:
 
 * Chat interface
 * Dr. Mike-style responses
@@ -68,15 +68,7 @@ echo "OPENAI_API_KEY=your_key" > .env.local
 npm run dev
 ```
 
-## Deployment
 
-```bash
-# Deploy with Vercel
-npm install -g vercel
-vercel
-```
-
-Or deploy using the Vercel Dashboard.
 
 ## Knowledge Base
 
