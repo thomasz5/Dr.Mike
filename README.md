@@ -2,6 +2,23 @@
 
 A fitness chatbot that mimics Dr. Michael Israetel using GPT-4. This full-stack project demonstrates AI personality, real-time chat, and modern web development.
 
+## RAG/Infra Additions
+
+- Docker Compose services for web, Redis, and a Python RAG worker
+- Python FastAPI worker using SentenceTransformers and Redis as a simple vector store
+- API now optionally injects retrieved context (set `USE_RAG=true`)
+
+Run via Docker:
+
+```bash
+docker compose up --build
+```
+
+RAG worker endpoints:
+
+- `POST /upsert` to index text
+- `POST /query` to retrieve top-k matches
+
 ## Live Demo
 Coming soon!
 <!-- [Visit Site](https://your-domain.com) -->

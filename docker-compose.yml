@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001" # RedisInsight
+    environment:
+      - REDIS_ARGS=--save 20 1 --appendonly yes
+
+  rag-worker:
+    build:
+      context: ./rag-worker
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+    depends_on:
+      - redis
+    ports:
+      - "8000:8000"
+
+  web:
+    build:
+      context: ./dr-mike-ai
+    environment:
+      - NODE_ENV=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PROVIDER=openai
+      - USE_RAG=true
+      - RETRIEVAL_API_URL=http://rag-worker:8000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./dr-mike-ai:/app
+      - /app/node_modules
+    depends_on:
+      - rag-worker
+      - redis
+
+
