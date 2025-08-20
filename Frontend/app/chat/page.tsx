@@ -63,34 +63,33 @@ export default function ChatPage() {
             onNewChat={startNewChat}
             onLoadSession={loadSession}
             onDeleteSession={deleteSession}
-            onClearAllSessions={clearAllSessions} // Added clearAllSessions prop
+            onClearAllSessions={clearAllSessions}
           />
         </div>
 
-        {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex-1 flex">
-            <div className="flex-1 flex flex-col">
-              <ChatArea
-                onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-                showSidebarButton={!sidebarOpen}
-                onSetInput={handlePromptClick}
-                messages={messages}
-                isLoading={isLoading}
-                error={error}
-                onSendMessage={sendMessage}
-                onRetry={retryLastMessage}
-                onClear={clearMessages}
-              />
-            </div>
-
-            {/* Right Tips Panel */}
-            {showTips && (
-              <div className="hidden xl:block w-80 border-l border-border bg-card/50">
-                <ChatTips onClose={() => setShowTips(false)} onPromptClick={handlePromptClick} />
-              </div>
-            )}
+        {/* Main Content Area */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Chat Area - Always takes available space */}
+          <div className="flex-1 min-w-0 flex flex-col">
+            <ChatArea
+              onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+              showSidebarButton={!sidebarOpen}
+              onSetInput={handlePromptClick}
+              messages={messages}
+              isLoading={isLoading}
+              error={error}
+              onSendMessage={sendMessage}
+              onRetry={retryLastMessage}
+              onClear={clearMessages}
+            />
           </div>
+
+          {/* Right Tips Panel - Fixed width, doesn't affect chat area */}
+          {showTips && (
+            <div className="hidden xl:block w-80 border-l border-border bg-card/50 flex-shrink-0">
+              <ChatTips onClose={() => setShowTips(false)} onPromptClick={handlePromptClick} />
+            </div>
+          )}
         </div>
 
         {/* Tips toggle button for smaller screens */}

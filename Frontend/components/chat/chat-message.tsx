@@ -24,6 +24,32 @@ export function ChatMessage({ message }: ChatMessageProps) {
   const [copied, setCopied] = useState(false)
   const [showActions, setShowActions] = useState(false)
 
+  // Convert bold-only section lines like **Title:** into actual Markdown headings for better readability
+  const formatAssistantContent = (content: string) => {
+    const lines = content.split("\n")
+    const transformed: string[] = []
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+      const trimmed = line.trim()
+
+      // Match lines that are just bold text optionally ending with a colon, e.g. **Main Point:**
+      const headingMatch = /^\*\*(.+?)\*\*:?$/.exec(trimmed)
+      if (headingMatch) {
+        transformed.push(`### ${headingMatch[1]}`)
+        // Ensure a blank line after headings for Markdown correctness
+        if (i + 1 < lines.length && lines[i + 1].trim() !== "") {
+          transformed.push("")
+        }
+        continue
+      }
+
+      transformed.push(line)
+    }
+
+    return transformed.join("\n")
+  }
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(message.content)
     setCopied(true)
@@ -63,12 +89,70 @@ export function ChatMessage({ message }: ChatMessageProps) {
             <span className="text-xs text-muted-foreground">{formatTime(message.timestamp)}</span>
           </div>
 
-          <div className="prose prose-sm dark:prose-invert max-w-none">
+          <div className={`dark:prose-invert max-w-none ${
+            message.role === "assistant" ? "prose prose-base md:prose-lg" : "prose prose-sm"
+          }`}>
             {message.role === "user" ? (
               <p className="whitespace-pre-wrap">{message.content}</p>
             ) : (
               <ReactMarkdown
                 components={{
+                  h1({ children, ...props }) {
+                    return (
+                      <h1 className="text-2xl md:text-3xl font-bold leading-snug" {...props}>
+                        {children}
+                      </h1>
+                    )
+                  },
+                  h2({ children, ...props }) {
+                    return (
+                      <h2 className="text-xl md:text-2xl font-semibold leading-snug" {...props}>
+                        {children}
+                      </h2>
+                    )
+                  },
+                  h3({ children, ...props }) {
+                    return (
+                      <h3 className="text-lg md:text-xl font-semibold leading-snug" {...props}>
+                        {children}
+                      </h3>
+                    )
+                  },
+                  p({ children, ...props }) {
+                    return (
+                      <p className="text-base md:text-[17px] leading-relaxed" {...props}>
+                        {children}
+                      </p>
+                    )
+                  },
+                  ul({ children, ...props }) {
+                    return (
+                      <ul className="list-disc pl-5 space-y-1" {...props}>
+                        {children}
+                      </ul>
+                    )
+                  },
+                  ol({ children, ...props }) {
+                    return (
+                      <ol className="list-decimal pl-5 space-y-1" {...props}>
+                        {children}
+                      </ol>
+                    )
+                  },
+                  li({ children, ...props }) {
+                    return (
+                      <li className="leading-relaxed" {...props}>
+                        {children}
+                      </li>
+                    )
+                  },
+                  strong({ children, ...props }) {
+                    return (
+                      <strong className="font-semibold" {...props}>
+                        {children}
+                      </strong>
+                    )
+                  },
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "")
                     return !inline && match ? (
@@ -99,7 +183,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
                   },
                 }}
               >
-                {message.content}
+                {formatAssistantContent(message.content)}
               </ReactMarkdown>
             )}
           </div>
