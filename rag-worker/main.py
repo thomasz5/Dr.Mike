@@ -123,3 +123,10 @@ def query(req: QueryRequest) -> List[QueryResult]:
     return store.query(req.namespace, req.query, req.top_k)
 
 
+
+
+
+
+
+
+
